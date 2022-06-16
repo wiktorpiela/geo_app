@@ -1,21 +1,26 @@
 library("tidyverse")
 library("shiny")
-library("shinyjs")
-source("pietro_system_tab.R")
+source("zadania_otwarte.R")
 source("kafelki.R")
 
 ui <- fluidPage(
   
-  theme = "https://stackpath.bootstrapcdn.com/bootswatch/3.4.1/morph/bootstrap.min.css",
-  
   navbarPage("Geo App", id = "all_tabs", 
              
-             tabPanel("Home"),
+             tabPanel("Home",
+                      
+                      fluidRow(
+                        
+                        column(6, actionButton("goto_zad_otw", "Zadania otwarte")),
+                        
+                        column(6 , actionButton("goto_kafelki", "Kalefki"))
+                        
+                        )
+                      ),
              
-             pietro_system_tab,
+             zadania_otwarte,
              
              kafelki
              
              )
-  
   )
