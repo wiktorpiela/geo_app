@@ -6,7 +6,6 @@ sys <- pietro_system_data %>%
   mutate(quest = word(quest,-1)) %>% 
   select(quest) %>% pull()
 
-
 pietro_system_tab <- tabPanel("Pietro system",
                               
                               actionButton("ps_los", "Losuj"),

@@ -5,6 +5,13 @@ source("pietro_system_tab.R")
 
 server <- function(input, output, session){
   
+  if(1==1) {
+    
+    hideTab(inputId = "all_tabs", 
+            target = list("Pietro system"))
+    
+    }
+  
 # pietro system tab -------------------------------------------------------
   
   los_sys <- reactiveVal(sys[1])
@@ -42,7 +49,7 @@ server <- function(input, output, session){
     
     })
   
-  # output$tab <- renderText(correct_value())
+  output$tab <- renderText(correct_value())
   
  
   observeEvent(input$ps_show, {
