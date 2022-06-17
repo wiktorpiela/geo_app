@@ -6,7 +6,7 @@ source("zadania_otwarte.R")
 data_otwarte <- read_rds("data/prepared_data.rds")
 
 server <- function(input, output, session){
-
+  
 # home --------------------------------------------------------------------
   
   observeEvent(input$goto_zad_otw, {
