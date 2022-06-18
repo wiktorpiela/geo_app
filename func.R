@@ -1,5 +1,8 @@
 library("tidyverse")
 
+
+# funkcje do zadan otwartych ----------------------------------------------
+
 ps_clear_input <- function(text){
   
   text <- tolower(str_replace_all(text,"[^[:alnum:]]",""))
@@ -78,3 +81,11 @@ prepare_pie_odd_data <- function(data){
 # prepare_sys_era_data(data_otwarte)
 # prepare_odd_sys_data(data_otwarte)
 # prepare_pie_odd_data(data_otwarte)
+
+
+
+# funkcje do zadan zamknietych --------------------------------------------
+
+unlist(strsplit(pull(prepare_pie_sys_data(data_otwarte)[1,2]),";"))
+
+

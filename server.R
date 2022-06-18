@@ -220,4 +220,121 @@ server <- function(input, output, session){
       # output$probatable <- renderTable(otwarte_zadania_dane())
       
    
+# zadania zamkniete -------------------------------------------------------
+      
+  zamkniete_zadania_dane <- reactive({
+    
+    switch(input$typ_pyt_zam,
+           "pie_sys" = prepare_pie_sys_data(data_otwarte),
+           "sys_era" = prepare_sys_era_data(data_otwarte),
+           "odd_sys" = prepare_odd_sys_data(data_otwarte),
+           "pie_odd" = prepare_pie_odd_data(data_otwarte))
+    
+    })
+      
+  zamkniete_klucz <- reactive({
+    
+    pull(zamkniete_zadania_dane(),1)
+    
+  })
+  
+  zamk_los_klucz <- reactiveVal(NULL)
+  
+  pula_zamkniete <<- character()
+  
+  observeEvent(input$zamkniete_los, {
+    
+    nowy_los <- sample(zamkniete_klucz()[!zamkniete_klucz() %in% pula_zamkniete & zamkniete_klucz()!=zamk_los_klucz()],1)
+    zamk_los_klucz(nowy_los)
+    
+    pula_zamkniete <<- append(pula_zamkniete, nowy_los) 
+    
+    if(length(pula_zamkniete)==3 & input$typ_pyt_zam=="sys_era"){
+      
+      pula_zamkniete <<- character()
+      
+    } else if(length(pula_zamkniete)==12 & input$typ_pyt_zam=="pie_sys" | input$typ_pyt_zam=="odd_sys"){
+      
+      pula_zamkniete <<- character()
+      
+    } else if(length(pula_zamkniete)==34 & input$typ_pyt_zam=="pie_odd"){
+      
+      pula_zamkniete <<- character()
+      
+    }
+    
+  })
+  
+  observeEvent(input$typ_pyt_zam, {
+    
+    if(input$typ_pyt_zam=="pie_sys"){
+      
+      nowy_los <- sample(zamkniete_klucz(),1)
+      zamk_los_klucz(nowy_los)
+      
+      pula_zamkniete <<- character()
+      pula_zamkniete <<- append(pula_zamkniete,zamk_los_klucz()) 
+      
+      output$polecenie_zamkniete <- renderText(paste("Wypisz pietra systemu:",zamk_los_klucz()))
+      
+    } else if(input$typ_pyt_zam=="sys_era"){
+      
+      nowy_los <- sample(zamkniete_klucz(),1)
+      zamk_los_klucz(nowy_los)
+      
+      pula_zamkniete <<- character()
+      pula_zamkniete <<- append(pula_zamkniete,zamk_los_klucz()) 
+      
+      output$polecenie_zamkniete <- renderText(paste("Wypisz systemy ery:",zamk_los_klucz()))
+      
+    } else if(input$typ_pyt_zam=="odd_sys"){
+      
+      nowy_los <- sample(zamkniete_klucz(),1)
+      zamk_los_klucz(nowy_los)
+      
+      pula_zamkniete <<- character()
+      pula_zamkniete <<- append(pula_zamkniete,zamk_los_klucz()) 
+      
+      output$polecenie_zamkniete <- renderText(paste("Wypisz oddzialy systemu:",zamk_los_klucz()))
+      
+    } else {
+      
+      nowy_los <- sample(zamkniete_klucz(),1)
+      zamk_los_klucz(nowy_los)
+      
+      pula_zamkniete <<- character()
+      pula_zamkniete <<- append(pula_zamkniete,zamk_los_klucz()) 
+      
+      output$polecenie_zamkniete <- renderText(paste("Wypisz pietra oddzialu:",zamk_los_klucz()))
+      
+    }
+    
+  })
+  
+  klocki <- reactive({
+    
+    sample(zamkniete_zadania_dane() %>% 
+      filter(klucz==zamk_los_klucz()) %>% 
+      pull(2) %>% 
+      str_split(";") %>% 
+      unlist())
+    
+    })
+  
+  output$klocki_tab <- renderUI({
+    
+    rank_list(
+      
+        text = "Drag the items in any desired order",
+        labels = klocki(),
+        input_id = "rank_list_basic"
+      )
+    })
+  
+
+  output$spr <- renderText(klocki())
+  
+
+  
+
 }
