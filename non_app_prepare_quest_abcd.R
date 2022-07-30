@@ -666,7 +666,7 @@ library(shiny)
 library(tidyverse)
 
 
-quest <- read_csv("C:/Users/wpiel/OneDrive/Desktop/dupa.csv") %>% drop_na()
+quest <- read_csv("C:/Users/wpiel/OneDrive/Desktop/gg") %>% drop_na()
 
 logic_mask <- tibble(
   
@@ -740,11 +740,11 @@ server <- function(input,output,session){
     
     if(true_indx() == input$radio){
       
-      output$result <- renderText("poprawna odpowiedz - kochany chujek")
+      output$result <- renderText("")
       
     } else {
       
-      output$result <- renderText("zla odpowiedz - dupa")
+      output$result <- renderText("")
       
     }
     
