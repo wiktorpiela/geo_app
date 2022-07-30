@@ -70,7 +70,8 @@ prepare_pie_odd_data <- function(data){
     select(ODDZIAL, PIETRO) %>% 
     group_by(ODDZIAL) %>% 
     mutate(PIETRO = rev(PIETRO)) %>% 
-    summarise(paste0(PIETRO,collapse = ";")) 
+    summarise(paste0(PIETRO,collapse = ";")) %>% 
+    filter(ODDZIAL!="przidoli")
   
   colnames(data) <- c("klucz", "wartosc")
 
@@ -86,6 +87,21 @@ prepare_pie_odd_data <- function(data){
 
 # funkcje do zadan zamknietych --------------------------------------------
 
-unlist(strsplit(pull(prepare_pie_sys_data(data_otwarte)[1,2]),";"))
+# unlist(strsplit(pull(prepare_pie_sys_data(data_otwarte)[1,2]),";"))
+
+prepare_brick_quest_data <- function(data){
+  
+  x <- distinct(data[,c(2,3)]) %>% 
+    group_by(SYSTEM) %>% 
+    summarise(ODDZIAL = paste0(ODDZIAL, collapse=";"))
+  
+  y <- distinct(data[,c(2,4)]) %>% 
+    group_by(SYSTEM) %>% 
+    summarise(PIETRO = paste0(PIETRO, collapse=";"))
+  
+  
+  return(left_join(x,y))
+  
+}
 
 

@@ -1,86 +1,221 @@
 library("shiny")
-library("tidyverse")
 library("sortable")
 
 
 kafelki <- tabPanel("kafelki",
                     
-                    sidebarLayout(
+                    wellPanel(
+                      h6("Poziom",style="text-align: center"),
+                      br(),
+                      tags$div(
+                      materialSwitch("switch_button",
+                                     label = icon("arrow-down"),
+                                     inline = TRUE,
+                                     status = "primary"),
+                      tags$span(icon("arrow-up"))),
                       
-                      sidebarPanel(
-                        
-                        selectInput("typ_pyt_zam",
-                                    "Wybierz typ pytania otwartego:",
-                                    c("Wypisz pietra systemu" = "pie_sys",
-                                      "Wypisz systemy ery" = "sys_era",
-                                      "Wypisz oddzialy systemu" = "odd_sys",
-                                      "Wypisz pietra oddzialu" = "pie_odd"))
-                        
+                      style="background-color: white;
+                      width: 130px;
+                      font-size:11px;
+                      border-radius:10px;
+                      box-shadow:0 1px 2px #5e5d5b;
+                      color: #33518e;
+                      border:none;
+                      font-family: Arial Black;"
                       ),
+                    
+                    tabsetPanel(id="kafelki_inside_tabset",
+                                
+                                type = "hidden",
                       
-                      mainPanel(
-                        
-                        actionButton("zamkniete_los", "Losuj"),
-                        textOutput("polecenie_zamkniete"),
-                        htmlOutput("klocki_tab",
-                                   style = "{
-                                   background: #098ebb;
-                                             color: #e3edf2;
-                                   }"),
-                        textOutput("spr")
-                        
-                        
+                      tabPanel("A",
+                               
+                               sidebarLayout(
+                                 
+                                 sidebarPanel(
+                                   
+                                   selectInput("typ_pyt_zam",
+                                               "Wybierz typ pytania:",
+                                               
+                                               c("Uszereguj pietra systemu" = "pie_sys",
+                                                 "Uszereguj systemy eratemu" = "sys_era",
+                                                 "Uszereguj oddzialy systemu" = "odd_sys",
+                                                 "Uszereguj pietra oddzialu" = "pie_odd")),
+                                   
+                                   actionButton("zamkniete_los", "Losuj pytanie",
+                                                
+                                   style="background-color: #33518e;
+                                   width: 250px;
+                                   font-size:15px;
+                                   border-radius:10px;
+                                   box-shadow:0 1px 2px #5e5d5b;
+                                   color: #FFFFFF;
+                                   border:none;
+                                   font-family: Arial Black"),
+                                   
+                                   style = "background-color: white;
+                                   font-size:15px;
+                                   border-radius:0px;
+                                   box-shadow:0 1px 2px #5e5d5b"
+                                   
+                                 ),
+                                 
+                                 mainPanel(
+                                   
+                                   sidebarPanel(
+                                     
+                                     fluidRow(
+                                       
+                                       column(3, 
+                                              
+                                              actionButton("zam_check", "Sprawdz",
+                                              
+                                              style="background-color: #33518e;
+                                              font-size:15px;
+                                              border-radius:10px;
+                                              box-shadow:0 1px 2px #5e5d5b;
+                                              color: #FFFFFF;
+                                              border:none;
+                                              font-family: Arial Black")
+                                              
+                                              ),
+                                       
+                                       column(7,
+                                              
+                                              actionButton("poprawna_odp_kafelki", "Pokaz odpowiedz",
+                                              
+                                              style="background-color: #33518e;
+                                              width: 250px;
+                                              font-size:15px;
+                                              border-radius:10px;
+                                              box-shadow:0 1px 2px #5e5d5b;
+                                              color: #FFFFFF;
+                                              border:none;
+                                              font-family: Arial Black"),
+                                              
+                                              bsModal("window3",
+                                                      title="Poprawna kolejnosc",
+                                                      trigger="poprawna_odp_kafelki",
+                                                      textOutput("spr"),
+                                                      tags$head(tags$style("#window3 .modal-footer{display:none}"))
+                                                      
+                                                      )
+                                              ),
+                                       
+                                       column(2,uiOutput("zamkniete_image"))
+                                       
+                                       ), br(),
+                                     
+                                     htmlOutput("klocki_tab",
+                                                style = "background: white;
+                                                color: black;
+                                                width:550px;
+                                                font-size:15px;
+                                                border-radius:0px;
+                                                border:none;
+                                                font-family: Arial Black"),
+                                     
+                                     style = "background-color: white;
+                            width:600px;
+                            font-size:15px;
+                            border-radius:0px;
+                            box-shadow:0 1px 2px #5e5d5b"
+                                     
+                                   )
+                                 )
+                               )  
+                               
+                               ),
+                      
+                      
+                      tabPanel("B",
+                               
+                               sidebarLayout(
+                                 
+                                 sidebarPanel(
+                                   
+                                   fluidRow(
+                                     
+                                     column(2,actionButton("los_system", "Losuj system",
+                                     
+                                     style="background-color: #33518e;
+                                     font-size:15px;
+                                     border-radius:10px;
+                                     box-shadow:0 1px 2px #5e5d5b;
+                                     color: #FFFFFF;
+                                     border:none;
+                                     font-family: Arial Black")
+                                     
+                                     ),
+                                     
+                                     column(2, actionButton("check_bucket", "Potwierdz",
+                                     
+                                     style="background-color: #33518e;
+                                     font-size:15px;
+                                     border-radius:10px;
+                                     box-shadow:0 1px 2px #5e5d5b;
+                                     color: #FFFFFF;
+                                     border:none;
+                                     font-family: Arial Black")
+                                     
+                                     ),
+                                     
+                                     column(3, actionButton("zobacz_odp_kafelki", "Pokaz odpowiedz",
+                                                            
+                                                            style="background-color: #33518e;
+                                                            font-size:15px;
+                                                            border-radius:10px;
+                                                            box-shadow:0 1px 2px #5e5d5b;
+                                                            color: #FFFFFF;
+                                                            border:none;
+                                                            font-family: Arial Black"),
+                                            
+                                            bsModal("window4",
+                                                    title = "Poprawna kolejnosc",
+                                                    trigger = "zobacz_odp_kafelki",
+                                                    tabsetPanel(
+                                                      tabPanel("Oddzialy",tableOutput("odp_kafelki_window")),
+                                                      tabPanel("Pietra",tableOutput("odp_kafelki_window2"))
+                                                      ),
+                                                    tags$head(tags$style("#window4 .modal-footer{display:none}"))
+                                                    )
+                                            
+                                            ),
+                                     
+                                     column(2, uiOutput("bucket_icon")),
+                                     
+                                     
+                                     column(1),
+                                     
+                                   ),
+                                   
+                                   htmlOutput("bucket_list",
+                                              style = "background: white;
+                                                color: black;
+                                                width:1500px;
+                                                font-size:15px;
+                                                border-radius:0px;
+                                                border:none;
+                                              font-family: Arial Black"),
+                                   
+                                   style = "background-color: white;
+                                   width:1550px;
+                                   font-size:15px;
+                                   border-radius:0px;
+                                   box-shadow:0 1px 2px #5e5d5b"
+                                   
+                                   ),
+                                 
+                                 mainPanel()
+                                 
+                                 ),
+                      
+                               # textOutput("czek3"),
+                               # textOutput("czek4"),
+                               # textOutput("czek5"),
+                               # textOutput("czek6"),
+                               # verbatimTextOutput("res2")
+                               
+                               )
                       )
-                    
                     )
-                    
-                  )
-
-
-
-
-labels <- list(
-  "one",
-  "two",
-  "three",
-  "five" 
-  )
-
-
-
-
-
-ui <- fluidPage(
-  fluidRow(
-    column(
-      width = 12,
-      tags$h2("Default, multi-drag and swapping behaviour"),
-      tabsetPanel(
-        type = "tabs",
-        tabPanel(
-          "Default",
-          tags$b("Exercise"),
-          #rank_list_basic,
-          tags$b("Result"),
-          verbatimTextOutput("results_basic")
-        )
-      )
-    )
-  )
-)
-
-server <- function(input, output) {
-  output$results_basic <- renderPrint({
-    input$rank_list_basic # This matches the input_id of the rank list
-    
-    rank_list_basic <- rank_list(
-      text = "Drag the items in any desired order",
-      labels = labels,
-      input_id = "rank_list_basic"
-    )
-    
-  })
-
-}
-
-shinyApp(ui, server)
