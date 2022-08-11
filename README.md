@@ -7,6 +7,9 @@ https://wpiela.shinyapps.io/geo_app/
 
 or locally on your desktop, use below code:
 
+```
+runGitHub(repo="geo_app", username="wiktorpiela", ref="main")
+```
 
 
 
