@@ -8,15 +8,10 @@ https://wpiela.shinyapps.io/geo_app/
 or locally on your desktop, use below code:
 
 ```
-if(!require(c("shiny","tidyverse","shinyjs","shinyWidgets","shinyBS","sortable"))) {
-  
-  install.packages(c("shiny","tidyverse","shinyjs","shinyWidgets","shinyBS","sortable"))
-  
-}
-library(shiny)
+list_of_packages <- c("shiny","tidyverse","shinyjs","shinyWidgets","shinyBS","sortable")
+new_packages <- list_of_packages[!(list_of_packages %in% installed.packages()[,"Package"])]
+if(length(new_packages)) install.packages(new_packages)
 
-runGitHub(repo="geo_app", username="wiktorpiela", ref="main")
+shiny::runGitHub(repo="geo_app", username="wiktorpiela", ref="main")
+
 ```
-
-
-
