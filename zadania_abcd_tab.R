@@ -105,5 +105,7 @@ zadania_abcd_jedn <- tabPanel("Pytania zamknięte",
                                     
                                     )
                                   )
-                                )
+                                ),
+                              textOutput("txt1"),
+                              textOutput("txt2")
                               )

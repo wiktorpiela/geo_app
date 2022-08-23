@@ -109,7 +109,7 @@ zadania_otwarte <- tabPanel("Pytania otwarte",
                               ),
                             
                             bsModal("window",
-                                    title = "Poprawna kolejność",
+                                    title = "Poprawna kolejność (od najstarszych do najmłodszych)",
                                     trigger = "otwarte_pokaz",
                                     textOutput("otwarte_odpowiedz"),
                                     tags$head(tags$style("#window .modal-footer{ display:none}"))

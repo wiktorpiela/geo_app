@@ -289,7 +289,7 @@ server <- function(input, output, session){
     
     observeEvent(input$otwarte_pokaz,{
       
-      output$otwarte_odpowiedz <- renderText(answer_object())
+      output$otwarte_odpowiedz <- renderText(paste0(answer_object(), collapse=", "))
       
       })
      
@@ -448,7 +448,7 @@ server <- function(input, output, session){
 
     })
   
-  output$spr <- renderText(klocki_odp())
+  output$spr <- renderText(paste0(rev(klocki_odp()),collapse=", "))
   
   output$res <- renderPrint(input$rank_list_basic)
   
@@ -486,6 +486,18 @@ server <- function(input, output, session){
     })
     
 # zadania zamkniete cz 2 --------------------------------------------------
+  
+  observeEvent(input$info_bttn,{
+    
+    shinyalert(title = "Informacja!", 
+    text = paste("Uszereguj chronologicznie (od najstarszych do najmłodszych) oddziały i odpowiadające im piętra.",
+                 "Wykorzystaj elementy oddzielające w celu odseparowania poszczególnych oddziałów oraz pięter w taki sposób",
+                 "aby było wiadomo, które piętra przynależą do którego oddziału.",
+                 collapse = "\n"),
+    type = "info",
+    closeOnClickOutside = TRUE)
+    
+    })
   
   observeEvent(input$kafelki_inside_tabset,{
     
@@ -695,20 +707,10 @@ server <- function(input, output, session){
   zadania_zamk_quiz1_data <- reactive({
     
     switch(input$typ_zad_zam_jedn,
-           "pie_sys"= read_rds("data/abc_jedn_pie_sys.rds"),
-           "sys_era"= read_rds("data/abc_jedn_sys_era.rds"),
-           "oddz_sys"= read_rds("data/abc_jedn_oddz_sys.rds"),
-           "pie_oddz"= read_rds("data/abc_jedn_pie_oddz.rds"))
-    
-  })
-  
-  zadania_zamk_quiz1_logic_mask <- reactive({
-    
-    switch(input$typ_zad_zam_jedn,
-           "pie_sys"= read_rds("data/abc_jedn_pie_sys_logic_mask_pie_sys.rds"),
-           "sys_era"= read_rds("data/abc_jedn_pie_sys_logic_mask_sys_era.rds"),
-           "oddz_sys"= read_rds("data/abc_jedn_pie_sys_logic_mask_oddz_sys.rds"),
-           "pie_oddz"= read_rds("data/abc_jedn_pie_sys_logic_mask_pie_oddz.rds"))
+           "pie_sys"= read_rds("data/abcd_pietr_sys.rds"),
+           "sys_era"= read_rds("data/abcd_sys_era.rds"),
+           "oddz_sys"= read_rds("data/abcd_oddz_sys.rds"),
+           "pie_oddz"= read_rds("data/abcd_pietr_oddz.rds"))
     
   })
   
@@ -732,10 +734,6 @@ server <- function(input, output, session){
 
     random(new_num)
 
-    new_indx <- which(as.logical(zadania_zamk_quiz1_logic_mask()[random(),]),TRUE)
-
-    true_indx(new_indx)
-
   })
   
   observeEvent(input$next_question_test1, {
@@ -752,10 +750,6 @@ server <- function(input, output, session){
     
     random(new_num)
     
-    new_indx <- which(as.logical(zadania_zamk_quiz1_logic_mask()[random(),]),TRUE)
-    
-    true_indx(new_indx)
-    
     })
   
   observeEvent(input$typ_zad_zam_jedn,{
@@ -770,46 +764,23 @@ server <- function(input, output, session){
     
     random(new_num)
     
-    new_indx <- which(as.logical(zadania_zamk_quiz1_logic_mask()[random(),]),TRUE)
-    
-    true_indx(new_indx)
-    
   })
   
-
   output$quiz1_ui <- renderUI({
 
     req(random())
     
-    if(input$typ_zad_zam_jedn != "sys_era"){
-      
-      radioGroupButtons("quiz1",
-                   label = paste(zadania_zamk_quiz1_data()[random(),1],zadania_zamk_quiz1_data()[random(),2]),
-                   choiceNames = as.character(zadania_zamk_quiz1_data()[random(),3:7]),
-                   choiceValues = c(1,2,3,4,5),
-                   selected = "",
-                   individual = TRUE,
-                   checkIcon = list(
-                     yes = tags$i(class = "fa fa-circle", 
-                                  style = "color: steelblue"),
-                     no = tags$i(class = "fa fa-circle-o", 
-                                 style = "color: steelblue")))
-      
-    } else {
-        
-      radioGroupButtons("quiz1",
-                   label = paste(mutate(zadania_zamk_quiz1_data()[random(),1],pytanie = replace(pytanie,pytanie=="Wybierz system ery:","Wybierz system eratemu:")),zadania_zamk_quiz1_data()[random(),2]),
-                   choiceNames = as.character(zadania_zamk_quiz1_data()[random(),3:6]),
-                   choiceValues = c(1,2,3,4),
-                   selected = "",
-                   individual = TRUE,
-                   checkIcon = list(
-                     yes = tags$i(class = "fa fa-circle", 
-                                  style = "color: steelblue"),
-                     no = tags$i(class = "fa fa-circle-o", 
-                                 style = "color: steelblue")))
-      
-    }
+    radioGroupButtons("quiz1",
+                      label = paste(zadania_zamk_quiz1_data()[random(),1],zadania_zamk_quiz1_data()[random(),2]),
+                      choiceNames = as.character(zadania_zamk_quiz1_data()[random(),3:7]),
+                      choiceValues = as.character(zadania_zamk_quiz1_data()[random(),3:7]),
+                      selected = "",
+                      individual = TRUE,
+                      checkIcon = list(
+                        yes = tags$i(class = "fa fa-circle", 
+                                     style = "color: steelblue"),
+                        no = tags$i(class = "fa fa-circle-o", 
+                                    style = "color: steelblue")))
     
   })
   
@@ -821,7 +792,7 @@ server <- function(input, output, session){
     
     shinyjs::enable("check_answer")
     
-    if(true_indx() == input$quiz1){
+    if(as.character(zadania_zamk_quiz1_data()[random(),8]) == input$quiz1){
       
       output$result <- renderUI({
         
@@ -857,7 +828,7 @@ server <- function(input, output, session){
     
     output$zamk_jedn_poprawna <- renderText({
       
-      zadania_zamk_quiz1_data()[random(),-c(1,2)] %>% select(true_indx()) %>% pull()
+      pull(zadania_zamk_quiz1_data()[random(),8])
       
       })
     

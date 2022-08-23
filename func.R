@@ -104,4 +104,5 @@ prepare_brick_quest_data <- function(data){
   
 }
 
-
+# extract character vector from tibble's row
+extract_char_vec <- function(pattern) unlist(str_split(as.character(pattern),","))

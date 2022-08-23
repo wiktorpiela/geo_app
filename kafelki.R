@@ -1,5 +1,6 @@
 library("shiny")
 library("sortable")
+library("shinyalert")
 
 
 kafelki <- tabPanel("kafelki",
@@ -94,7 +95,7 @@ kafelki <- tabPanel("kafelki",
                                               font-family: Arial Black"),
                                               
                                               bsModal("window3",
-                                                      title="Poprawna kolejność",
+                                                      title="Poprawna kolejność - jaka",
                                                       trigger="poprawna_odp_kafelki",
                                                       textOutput("spr"),
                                                       tags$head(tags$style("#window3 .modal-footer{display:none}"))
@@ -136,6 +137,19 @@ kafelki <- tabPanel("kafelki",
                                    
                                    fluidRow(
                                      
+                                     column(1,
+                                            useShinyalert(),
+                                            align="center",
+                                            actionButton("info_bttn",icon("info"),
+                                            style="background-color: #33518e;
+                                            font-size:15px;
+                                            border-radius:10px;
+                                            box-shadow:0 1px 2px #5e5d5b;
+                                            color: #FFFFFF;
+                                            border:none;
+                                            font-family: Arial Black")
+                                            ),
+                                     
                                      column(2,actionButton("los_system", "Losuj system",
                                      
                                      style="background-color: #33518e;
@@ -171,7 +185,7 @@ kafelki <- tabPanel("kafelki",
                                                             font-family: Arial Black"),
                                             
                                             bsModal("window4",
-                                                    title = "Poprawna kolejność",
+                                                    title = "Poprawna kolejność (od najstarszych do najmłodszych)",
                                                     trigger = "zobacz_odp_kafelki",
                                                     tabsetPanel(
                                                       tabPanel("Oddziały",tableOutput("odp_kafelki_window")),
@@ -185,9 +199,7 @@ kafelki <- tabPanel("kafelki",
                                      column(2, uiOutput("bucket_icon")),
                                      
                                      
-                                     column(1),
-                                     
-                                   ),
+                                     ),
                                    
                                    htmlOutput("bucket_list",
                                               style = "background: white;
